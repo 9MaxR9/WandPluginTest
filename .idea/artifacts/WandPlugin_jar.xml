@@ -1,0 +1,10 @@
+<component name="ArtifactManager">
+  <artifact type="jar" name="WandPlugin:jar">
+    <output-path>$PROJECT_DIR$/../../Server/plugins/WandPlugin_jar</output-path>
+    <root id="archive" name="WandPlugin.jar">
+      <element id="module-output" name="WandPlugin" />
+      <element id="extracted-dir" path="$USER_HOME$/Downloads/jar_files(1)/HikariCP-3.1.0.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="$USER_HOME$/Downloads/craftbukkit-1.16.3.jar" path-in-jar="/" />
+    </root>
+  </artifact>
+</component>
