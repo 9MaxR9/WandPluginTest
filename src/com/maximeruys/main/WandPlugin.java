@@ -2,8 +2,7 @@ package com.maximeruys.main;
 
 import com.maximeruys.commands.GiveWandCommand;
 import com.maximeruys.handler.EventHandler;
-import com.maximeruys.spels.SpellManager;
-import org.bukkit.event.Listener;
+import com.maximeruys.spells.SpellManager;
 import org.bukkit.plugin.java.JavaPlugin;
 
 public class WandPlugin extends JavaPlugin {

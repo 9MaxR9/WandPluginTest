@@ -1,18 +1,13 @@
 package com.maximeruys.user;
 
 import com.maximeruys.main.WandPlugin;
-import com.maximeruys.spels.AvadaKedavraSpell;
-import com.maximeruys.spels.Spell;
-import com.maximeruys.spels.SpellManager;
-import com.maximeruys.util.ReflectionUtil;
+import com.maximeruys.spells.AvadaKedavraSpell;
+import com.maximeruys.spells.Spell;
 import org.bukkit.*;
+import org.bukkit.entity.Arrow;
 import org.bukkit.entity.Player;
-import org.bukkit.entity.Snowball;
 import org.bukkit.scheduler.BukkitRunnable;
 import org.bukkit.util.Vector;
-
-import java.lang.reflect.Constructor;
-import java.lang.reflect.InvocationTargetException;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.UUID;
@@ -46,49 +41,35 @@ public class SpellUser {
 
     public void executeSpell(){
 
-        Player caster = Bukkit.getPlayer(uuid);
+        Player shooter = Bukkit.getPlayer(uuid);
 
-        if (caster == null || !caster.isOnline()) return;
+        final Arrow arrow = (Arrow) shooter.getWorld().spawn(shooter.getLocation(), Arrow.class);
+        arrow.setCustomNameVisible(false);
+        arrow.setCustomName(ChatColor.RED + getSelectedSpell().getName());
 
-        Location location = caster.getLocation();
-        Vector direction = location.getDirection().normalize();
+        arrow.setShooter(shooter);
+        arrow.setBounce(false);
+        arrow.setSilent(true);
+        arrow.setDamage(selectedSpell.getDamage());
+        arrow.setVelocity(shooter.getLocation().getDirection().multiply(3));
 
-         final Snowball snowball = caster.getWorld().spawn(caster.getEyeLocation().subtract(0, 0.1, 0), Snowball.class);
+        Location shooterLocation = shooter.getLocation();
+        Vector shooterDirection = shooterLocation.getDirection().normalize();
 
-        try {
+        new BukkitRunnable(){
+            public void run(){
 
-            Class<?> packetPlayOutEntityDestroy = ReflectionUtil.PackageType.MINECRAFT_SERVER.getClass("PacketPlayOutEntityDestroy");
-            Constructor<?> packetPlayOutEntityDestroyConstructor = packetPlayOutEntityDestroy.getConstructor(int[].class);
-
-            Object packetPlayOutEntityDestroyObj = packetPlayOutEntityDestroyConstructor.newInstance((Object) new int[] { snowball.getEntityId() });
-
-            Bukkit.getOnlinePlayers().forEach(player -> ReflectionUtil.sendPacket(player, packetPlayOutEntityDestroyObj));
-        } catch (ClassNotFoundException | NoSuchMethodException | IllegalAccessException | InstantiationException | InvocationTargetException e) {
-            e.printStackTrace();
-        }
-
-        snowball.setCustomNameVisible(false);
-        snowball.setCustomName(ChatColor.RED + getSelectedSpell().name());
-
-        snowball.setShooter(caster);
-        snowball.setBounce(false);
-        snowball.setSilent(true);
-
-        new BukkitRunnable() {
-            public void run() {
-                snowball.setVelocity(direction);
+                arrow.setVelocity(shooterDirection);
                 Particle.DustOptions dust = new Particle.DustOptions(Color.fromRGB(235, 147, 255), 2);
-                caster.getWorld().spawnParticle(Particle.REDSTONE, snowball.getLocation().getX(), snowball.getLocation().getY() + 0.1, snowball.getLocation().getZ(), 0, (float) direction.getX(), (float) direction.getY(), (float) direction.getZ(), 2.5 , dust);
+                shooter.getWorld().spawnParticle(Particle.REDSTONE, arrow.getLocation().getX(), arrow.getLocation().getY() + 0.1, arrow.getLocation().getZ(), 0, (float) shooterDirection.getX(), (float) shooterDirection.getY(), (float) shooterDirection.getZ(), 2.5 , dust);
 
-                double distance = snowball.getLocation().distance(caster.getLocation());
-
-                if ((snowball.isOnGround() || snowball.isDead()) || distance > getSelectedSpell().distance()) {
+                if(arrow.isOnGround()){
                     this.cancel();
-                    snowball.remove();
+                    arrow.remove();
                 }
-
             }
         }.runTaskTimer(WandPlugin.getPlugin(), 0, 1);
+
     }
 
 }

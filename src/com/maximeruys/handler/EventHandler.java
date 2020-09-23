@@ -1,11 +1,11 @@
 package com.maximeruys.handler;
 
 import com.maximeruys.main.WandPlugin;
-import com.maximeruys.spels.Spell;
+import com.maximeruys.spells.Spell;
 import com.maximeruys.user.SpellUser;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
-import org.bukkit.block.Block;
+import org.bukkit.entity.Arrow;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
 import org.bukkit.entity.Snowball;
@@ -33,10 +33,8 @@ public class EventHandler implements Listener {
 
     @org.bukkit.event.EventHandler
     public void onLeave(PlayerQuitEvent event){
-
         Player player = event.getPlayer();
         SPELL_USERS.remove(player.getUniqueId());
-
     }
 
     @org.bukkit.event.EventHandler
@@ -47,28 +45,20 @@ public class EventHandler implements Listener {
         }
     }
 
-
     @org.bukkit.event.EventHandler
     public void onSpellHitPlayer(ProjectileHitEvent event){
         Entity entity = event.getEntity();
-        if (entity instanceof Snowball) {
-            Snowball snowball = (Snowball) entity;
-            if(snowball.getShooter() instanceof Player){
-                Player shooter = (Player) snowball.getShooter();
-                String spellName = ChatColor.stripColor(snowball.getCustomName());
+        if (entity instanceof Arrow) {
+            Arrow arrow = (Arrow) entity;
+            if(arrow.getShooter() instanceof Player){
+                Player shooter = (Player) arrow.getShooter();
+                String spellName = ChatColor.stripColor(arrow.getCustomName());
                 Spell spell = WandPlugin.getPlugin().getSpellManager().getSpellByName(spellName);
                 if(spell != null){
                     Entity hitEntity = event.getHitEntity();
-                    Block hitBlock = event.getHitBlock();
-
                     if (hitEntity != null) {
                         spell.onHit(shooter, hitEntity);
                     }
-
-                    if (hitBlock != null) {
-                        spell.onHit(shooter, null);
-                    }
-
                 }
             }
         }
@@ -76,7 +66,7 @@ public class EventHandler implements Listener {
 
     @org.bukkit.event.EventHandler
     public void onSpellDamageNotPlayer(EntityDamageByEntityEvent event){
-        if(event.getDamager() instanceof Snowball){
+        if(event.getDamager() instanceof Arrow){
             Snowball snowball = (Snowball) event.getDamager();
             if(snowball.getShooter() instanceof Player){
                 String spellName = ChatColor.stripColor(snowball.getCustomName());
@@ -84,12 +74,12 @@ public class EventHandler implements Listener {
 
                 if (spell != null) {
 
-                    if (spell.damage() <= 0) {
+                    if (spell.getDamage() <= 0) {
                         event.setCancelled(true);
                         return;
                     }
 
-                    event.setDamage(spell.damage());
+                    event.setDamage(spell.getDamage());
                 }
             }
         }

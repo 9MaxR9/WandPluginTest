@@ -18,11 +18,7 @@ public class GiveWandCommand implements CommandExecutor {
     public boolean onCommand(CommandSender commandSender, Command command, String cmd, String[] args) {
         if(commandSender instanceof Player){
             Player player = (Player) commandSender;
-            if(cmd.equalsIgnoreCase("wand")){
-
-                player.getInventory().addItem(new ItemStack(Material.STICK, 1));
-
-            }
+            player.getInventory().addItem(new ItemStack(Material.STICK, 1));
         }
         return false;
     }
