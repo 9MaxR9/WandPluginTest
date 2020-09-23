@@ -67,9 +67,9 @@ public class EventHandler implements Listener {
     @org.bukkit.event.EventHandler
     public void onSpellDamageNotPlayer(EntityDamageByEntityEvent event){
         if(event.getDamager() instanceof Arrow){
-            Snowball snowball = (Snowball) event.getDamager();
-            if(snowball.getShooter() instanceof Player){
-                String spellName = ChatColor.stripColor(snowball.getCustomName());
+            Arrow arrow = (Arrow) event.getDamager();
+            if(arrow.getShooter() instanceof Player){
+                String spellName = ChatColor.stripColor(arrow.getCustomName());
                 Spell spell = WandPlugin.getPlugin().getSpellManager().getSpellByName(spellName);
 
                 if (spell != null) {
