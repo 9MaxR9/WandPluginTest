@@ -1,6 +1,6 @@
 package com.maximeruys.commands;
 
-import com.maximeruys.main.WandPlugin;
+import com.maximeruys.WandPlugin;
 import org.bukkit.Material;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;

@@ -1,6 +1,6 @@
 package com.maximeruys.handler;
 
-import com.maximeruys.main.WandPlugin;
+import com.maximeruys.WandPlugin;
 import com.maximeruys.spells.Spell;
 import com.maximeruys.user.SpellUser;
 import org.bukkit.ChatColor;

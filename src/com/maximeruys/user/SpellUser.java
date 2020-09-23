@@ -1,6 +1,6 @@
 package com.maximeruys.user;
 
-import com.maximeruys.main.WandPlugin;
+import com.maximeruys.WandPlugin;
 import com.maximeruys.spells.AvadaKedavraSpell;
 import com.maximeruys.spells.Spell;
 import org.bukkit.*;

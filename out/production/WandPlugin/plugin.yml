@@ -1,7 +1,7 @@
 name: WandPlugin
 version: 1
 author: MaxR2227
-main: com.maximeruys.main.WandPlugin
+main: com.maximeruys.WandPlugin
 commands:
   wand:
     usage: /<command>

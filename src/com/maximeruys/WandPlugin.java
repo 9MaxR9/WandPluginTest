@@ -1,4 +1,4 @@
-package com.maximeruys.main;
+package com.maximeruys;
 
 import com.maximeruys.commands.GiveWandCommand;
 import com.maximeruys.handler.EventHandler;
